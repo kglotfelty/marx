@@ -193,10 +193,10 @@ int _marx_hrc_i_geom_init (Param_File_Type *pf)
    if (NULL == (file = marx_make_data_file_name (file)))
      return -1;
 
-   if (-1 == pf_get_integer(pf, "Verbose", &verbose))
-     return -1;
-
-   if (verbose > 1) marx_message ("\t%s\n", file);
+   // when called from e.g. marx2fits, pf may be NULL
+   // and thus no verbose parameter is available
+   if (-1 != pf_get_integer(pf, "Verbose", &verbose))
+     if (verbose > 1) marx_message ("\t%s\n", file);
 
    if (-1 == _marx_read_simple_data_file (file, Array_Data_Table))
      {
