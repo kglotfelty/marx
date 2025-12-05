@@ -327,41 +327,18 @@ static int image_create_photons (Marx_Source_Type *st, Marx_Photon_Type *pt, /*{
   if (-1 == (*efun) (&st->spectrum, &at->energy))
     return -1;
 
-  // DELME -----
-  //~ ofs = JDMbinary_search_f (JDMrandom (), Image, Image_Size);
+  ofs = JDMbinary_search_f (JDMrandom (), Image, Image_Size);
 
-  //~ y = (double) (ofs / X_Image_Size);
-  //~ x = (double) (ofs % X_Image_Size);
+  y = (double) (ofs / X_Image_Size);
+  x = (double) (ofs % X_Image_Size);
 
-  //~ /* Center the image and randomize within the pixel.
-   //~ * In fits, the image center is at an integer pixel, so we need to
-   //~ * subtract 0.5 to make the random number from -0.5 to 0.5 so
-   //~ * the distribution is centered on the pixel.
-   //~ */
-  //~ y += -0.5 * Y_Image_Size + (JDMrandom () - 0.5);
-  //~ x += -0.5 * X_Image_Size + (JDMrandom () - 0.5);
-  // END DELME ---
-
-        // binary_search is finding the last pixel less than JDMrandom().
-        // We want the 1st pixel that includes JDMrandom().
-	ofs = JDMbinary_search_f (JDMrandom (), Image, Image_Size) +1;
-        if (ofs >= Image_Size) {
-            ofs = Image_Size-1;
-        }
-
-        y = (double) floor(ofs / X_Image_Size);  // floor() because we want the integer part only here
-        x = (double) (ofs % X_Image_Size);
-
-        /* Convert from C-array index to image pixel index */
-        y += 1;
-        x += 1;
-
-	/* Center the image and randomize within the pixel.  Note that the
-	 * average of the RHS of next expression is 0.5*YSize
-	 */
-
-	y -= 0.5 * Y_Image_Size + JDMrandom ();
-	x -= 0.5 * X_Image_Size + JDMrandom ();
+  /* Center the image and randomize within the pixel.
+   * In fits, the image center is at an integer pixel, so we need to
+   * subtract 0.5 to make the random number from -0.5 to 0.5 so
+   * the distribution is centered on the pixel.
+   */
+  y += -0.5 * Y_Image_Size + (JDMrandom () - 0.5);
+  x += -0.5 * X_Image_Size + (JDMrandom () - 0.5);
 
   y = y * Rad_Per_YPixel;
   x = x * Rad_Per_XPixel;
